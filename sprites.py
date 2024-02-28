@@ -2,7 +2,6 @@
 # This code was inspired by Zelda and informed by Chris Bradfield
 import pygame as pg
 from settings import *
-
 class Player(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites
@@ -16,7 +15,7 @@ class Player(pg.sprite.Sprite):
         self.x = x * TILESIZE
         self.y = y * TILESIZE
         self.moneybag = 0
-    
+
     def get_keys(self):
         self.vx, self.vy = 0, 0
         keys = pg.key.get_pressed()
@@ -31,12 +30,10 @@ class Player(pg.sprite.Sprite):
         if self.vx != 0 and self.vy != 0:
             self.vx *= 0.7071
             self.vy *= 0.7071
-
     # def move(self, dx=0, dy=0):
     #     if not self.collide_with_walls(dx, dy):
     #         self.x += dx
     #         self.y += dy
-
     # def collide_with_walls(self, dx=0, dy=0):
     #     for wall in self.game.walls:
     #         if wall.x == self.x + dx and wall.y == self.y + dy:
@@ -62,10 +59,13 @@ class Player(pg.sprite.Sprite):
                     self.y = hits[0].rect.bottom
                 self.vy = 0
                 self.rect.y = self.y
+
+
     def collide_with_group(self, group, kill):
         hits = pg.sprite.spritecollide(self, group, kill)
         if hits:
-            return True
+            if str(hits[0].__class__.__name__) == "Coin":
+                self.moneybag += 1
 
     def update(self):
         self.get_keys()
@@ -77,8 +77,15 @@ class Player(pg.sprite.Sprite):
         self.rect.y = self.y
         # add collision later
         self.collide_with_walls('y')
-        if self.collide_with_group(self.game.coins, True):
-            self.moneybag += 1
+        self.collide_with_group(self.game.coins, True)
+
+        # coin_hits = pg.sprite.spritecollide(self.game.coins, True)
+        # if coin_hits:
+        #     print("I got a coin")
+
+
+
+
 
 
 
@@ -107,5 +114,3 @@ class Coin(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
-        
-

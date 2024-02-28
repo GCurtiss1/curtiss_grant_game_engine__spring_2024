@@ -7,8 +7,6 @@ from sprites import *
 from random import randint
 import sys
 from os import path
-
-
 # Define game class...
 class Game:
     # Define a special method to init the properties of said class...
@@ -33,7 +31,6 @@ class Game:
             for line in f:
                 print(line)
                 self.map_data.append(line)
-
     # Create run method which runs the whole GAME
     def new(self):
         print("create new game...")
@@ -53,7 +50,7 @@ class Game:
                 if tile == 'P':
                     self.player = Player(self, col, row)
                 if tile == 'C':
-                    self.player = Coin(self, col, row)
+                    Coin(self, col, row)
 
     def run(self):
         # 
@@ -66,7 +63,6 @@ class Game:
     def quit(self):
          pg.quit()
          sys.exit()
-
     def update(self):
         self.all_sprites.update()
     
@@ -76,10 +72,19 @@ class Game:
          for y in range(0, HEIGHT, TILESIZE):
               pg.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
 
+    def draw_text(self, surface, text, size, color, x, y):
+        font_name = pg.font.match_font('arial')
+        font = pg.font.Font(font_name, size)
+        text_surface = font.render(text, True, color)
+        text_rect = text_surface.get_rect()
+        text_rect.topleft = (x*TILESIZE,y*TILESIZE)
+        surface.blit(text_surface, text_rect)
     def draw(self):
             self.screen.fill(BGCOLOR)
             self.draw_grid()
             self.all_sprites.draw(self.screen)
+            self.draw_text(self.screen, str(self.moneybag), 64, WHITE, 1, 1)
+
             pg.display.flip()
 
     def events(self):
@@ -95,7 +100,6 @@ class Game:
             #         self.player.move(dy=-1)
             #     if event.key == pg.K_DOWN:
             #         self.player.move(dy=1)
-
 # Instantiate the game... 
 g = Game()
 # use game method run to run
