@@ -32,7 +32,7 @@ class Game:
                 print(line)
                 self.map_data.append(line)
     # Create run method which runs the whole GAME
-    def new(self):
+    def new (self):
         print("create new game...")
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
@@ -72,6 +72,28 @@ class Game:
          for y in range(0, HEIGHT, TILESIZE):
               pg.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
 
+class Game:
+    def draw_health_bar(self, surface, x, y, width, height, health):
+        if health < 0:
+            health = 0
+        BAR_LENGTH = 100
+        BAR_HEIGHT = 10
+        # bar sizes
+        fill = (health / 100) * BAR_LENGTH
+        outline_rect = pg.Rect(x, y, BAR_LENGTH, BAR_HEIGHT)
+        fill_rect = pg.Rect(x, y, fill, BAR_HEIGHT)
+        pg.draw.rect(surface, GREEN, fill_rect)
+        pg.draw.rect(surface, WHITE, outline_rect, 2)
+
+    def draw(self):
+        # existing code...
+        self.all_sprites.draw(self.screen)
+        
+        # Draw health bar
+        player_health = self.player.health
+        self.draw_health_bar(self.screen, 10, 10, 100, 10, player_health)
+        pg.display.flip()             
+
     def draw_text(self, surface, text, size, color, x, y):
         font_name = pg.font.match_font('arial')
         font = pg.font.Font(font_name, size)
@@ -83,9 +105,23 @@ class Game:
             self.screen.fill(BGCOLOR)
             self.draw_grid()
             self.all_sprites.draw(self.screen)
-            self.draw_text(self.screen, str(self.moneybag), 64, WHITE, 1, 1)
+            # self.draw_text(self.screen, 64, WHITE, 1, 1)
 
             pg.display.flip()
+
+    
+
+    def wait_for_key(self):
+        waiting = True
+        while waiting:
+            self.clock.tick(FPS)
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    waiting = False
+                    self.quit()
+                if event.type == pg.KEYUP:
+                    waiting = False
+            
 
     def events(self):
          for event in pg.event.get():
@@ -104,7 +140,3 @@ class Game:
 g = Game()
 # use game method run to run
 # g.show_start_screen()
-while True:
-    g.new()
-    g.run()
-    # g.show_go_screen()
