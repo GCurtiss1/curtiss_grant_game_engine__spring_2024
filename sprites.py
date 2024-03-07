@@ -1,6 +1,7 @@
 # This file was created by: Grant Curtiss
 # This code was inspired by Zelda and informed by Chris Bradfield
 import pygame as pg
+from main import Game
 from settings import *
 class Player(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -79,28 +80,45 @@ class Player(pg.sprite.Sprite):
         self.collide_with_walls('y')
         self.collide_with_group(self.game.coins, True)
 
+        
+
         # coin_hits = pg.sprite.spritecollide(self.game.coins, True)
         # if coin_hits:
         #     print("I got a coin")
 
+class Player(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.health = 100
 
+class Player(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        # existing code...
+        self.health = 100  # Initial health value
 
+    def update(self):
+        # Check for collisions with enemies or hazards and decrement health
+        hits = pg.sprite.spritecollide(self, Game.enemies, False)
+        for enemy in hits:
+            self.health -= 10  # Decrease health when hit by an enemy
+            if self.health <= 0:
+                self.kill()  # Player dies when health reaches 0
 
-
-
+        # existing code...
+def update(self):
+    pass
 
 class Wall(pg.sprite.Sprite):
-    def __init__(self, game, x, y):
-        self.groups = game.all_sprites, game.walls
-        pg.sprite.Sprite.__init__(self, self.groups)
-        self.game = game
-        self.image = pg.Surface((TILESIZE, TILESIZE))
-        self.image.fill(BLUE)
-        self.rect = self.image.get_rect()
-        self.x = x
-        self.y = y
-        self.rect.x = x * TILESIZE
-        self.rect.y = y * TILESIZE
+            def __init__(self, game, x, y):
+                self.groups = game.all_sprites, game.walls
+                pg.sprite.Sprite.__init__(self, self.groups)
+                self.game = game
+                self.image = pg.Surface((TILESIZE, TILESIZE))
+                self.image.fill(BLUE)
+                self.rect = self.image.get_rect()
+                self.x = x
+                self.y = y
+                self.rect.x = x * TILESIZE
+                self.rect.y = y * TILESIZE
 
 class Coin(pg.sprite.Sprite):
     def __init__(self, game, x, y):
