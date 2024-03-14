@@ -8,7 +8,17 @@ from random import randint
 import sys
 from os import path
 
-
+def draw_health_bar(surf, x, y, pct):
+    if pct < 0:
+        pct = 0
+    BAR_LENGTH = 100
+    BAR_HEIGHT = 10
+    fill = (pct / 100) * BAR_LENGTH
+    outline_rect = pg.Rect(x, y, BAR_LENGTH, BAR_HEIGHT)
+    fill_rect = pg.Rect(x, y, fill, BAR_HEIGHT)
+    pg.draw.rect(surf, GREEN, fill_rect)
+    pg.draw.rect(surf, WHITE, outline_rect, 2)
+    print('trying')
 # Define game class...
 class Game:
     # Define a special method to init the properties of said class...
@@ -55,28 +65,6 @@ class Game:
                 if tile == 'C':
                     Coin(self, col, row)
 
-    def draw_health_bar(self, surface, x, y, width, height, health):
-        if health < 0:
-            health = 0
-        BAR_LENGTH = 100
-        BAR_HEIGHT = 10
-        # bar sizes
-        fill = (health / 100) * BAR_LENGTH
-        outline_rect = pg.Rect(x, y, BAR_LENGTH, BAR_HEIGHT)
-        fill_rect = pg.Rect(x, y, fill, BAR_HEIGHT)
-        pg.draw.rect(surface, GREEN, fill_rect)
-        pg.draw.rect(surface, WHITE, outline_rect, 2)
-
-    def draw(self):
-        self.screen.fill(BGCOLOR)
-        self.all_sprites.draw(self.screen)
-        self.draw_grid()
-        self.all_sprites.draw(self.screen)
-        
-        # Draw health bar
-        player_health = self.player.health
-        self.draw_health_bar(self.screen, 10, 10, 100, 10, player_health)
-
     def run(self):
         # 
         self.playing = True
@@ -105,12 +93,12 @@ class Game:
         text_rect.topleft = (x*TILESIZE,y*TILESIZE)
         surface.blit(text_surface, text_rect)
     def draw(self):
-            self.screen.fill(BGCOLOR)
-            self.draw_grid()
-            self.all_sprites.draw(self.screen)
-            self.draw_text(self.screen, str(self.player.moneybag), 64, WHITE, 1, 1)
-
-            pg.display.flip()
+        self.screen.fill(BGCOLOR)
+        self.draw_grid()
+        self.all_sprites.draw(self.screen)
+        self.draw_text(self.screen, str(self.player.moneybag), 64, WHITE, 1, 1)
+        draw_health_bar(self.screen, 5,5, 100)
+        pg.display.flip()
 
     def events(self):
          for event in pg.event.get():

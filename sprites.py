@@ -16,10 +16,7 @@ class Player(pg.sprite.Sprite):
         self.x = x * TILESIZE
         self.y = y * TILESIZE
         self.moneybag = 0
-
-    def __init__(self, game, x, y):
-        self.health = 100  
-        # Initial health value for the player
+        self.health = 100 
     
     def get_keys(self):
         self.vx, self.vy = 0, 0
@@ -115,25 +112,30 @@ class Coin(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
-        
-    class Game:
-        def draw_health_bar(self, surface, x, y, width, height, health):
-            if health < 0:
-                health = 0
-            BAR_LENGTH = 100
-            BAR_HEIGHT = 10
-            # Calculate the fill length based on the player's health
-            fill = (health / 100) * BAR_LENGTH
-            # Draw the outline of the health bar
-            outline_rect = pg.Rect(x, y, BAR_LENGTH, BAR_HEIGHT)
-            pg.draw.rect(surface, WHITE, outline_rect, 2)
-            # Draw the filled part of the health bar
-            fill_rect = pg.Rect(x, y, fill, BAR_HEIGHT)
-            pg.draw.rect(surface, GREEN, fill_rect)
+    
 
-        def draw(self):
-        # Your existing draw code...
-        # Draw the health bar on the screen
-            player_health = self.player.health
-            self.draw_health_bar(self.screen, 10, 10, 100, 10, player_health)
+class Enemy(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        pg.sprite.Sprite.__init__(self)
+        self.game = game
+        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image.fill(RED)
+        self.rect = self.image.get_rect()
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
+        self.vx = 1  # Initial velocity of the enemy
+
+    def update(self):
+        # Move the enemy horizontally
+        self.rect.x += self.vx
+        # Check for collisions with walls
+        hits = pg.sprite.spritecollide(self, self.game.walls, False)
+        for hit in hits:
+            # Reverse direction if colliding with a wall
+            if self.vx > 0:
+                self.rect.right = hit.rect.left
+            elif self.vx < 0:
+                self.rect.left = hit.rect.right
+            self.vx *= -1  # Reverse velocity
+        
 
