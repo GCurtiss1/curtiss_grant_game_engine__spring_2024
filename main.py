@@ -136,7 +136,6 @@ g = Game()
 # use game method run to run
 # g.show_start_screen()
 g.show_start_screen()
-while True:
-    g.new()
-    g.run()
-    # g.show_go_screen()
+g.new()
+g.run()
+# g.show_go_screen()

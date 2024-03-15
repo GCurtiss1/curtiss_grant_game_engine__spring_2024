@@ -17,6 +17,16 @@ class Player(pg.sprite.Sprite):
         self.y = y * TILESIZE
         self.moneybag = 0
         self.health = 100 
+        
+       
+    def take_damage(self, damage):
+        self.health -= damage
+        if self.health >= 0:
+            self.health = 0
+            # Player dies or any other game over logic
+        
+        # Update health bar
+        self.health.update(self.health)
     
     def get_keys(self):
         self.vx, self.vy = 0, 0
@@ -63,12 +73,21 @@ class Player(pg.sprite.Sprite):
                     self.y = hits[0].rect.bottom
                 self.vy = 0
                 self.rect.y = self.y
+                self.take_damage_from_wall()  # Call method to take damage
+
+    def take_damage_from_wall(self):
+        # Define how much damage the player takes when hitting a wall
+        damage = 10  # Example damage value, adjust as needed
+        self.game.player.take_damage(damage)  # Assuming self.game.player refers to the player instance
     
     def collide_with_group(self, group, kill):
         hits = pg.sprite.spritecollide(self, group, kill)
         if hits:
             if str(hits[0].__class__.__name__) == "Coin":
                 self.moneybag += 1
+            if str(hits[0].__class__.__name__) == "Wall":
+                self.health -= 10
+                print ("hitting wall")
 
     def update(self):
         self.get_keys()
@@ -81,6 +100,7 @@ class Player(pg.sprite.Sprite):
         # add collision later
         self.collide_with_walls('y')
         self.collide_with_group(self.game.coins, True)
+        self.collide_with_group(self.game.walls, False)
           
         # coin_hits = pg.sprite.spritecollide(self.game.coins, True)
         # if coin_hits:
