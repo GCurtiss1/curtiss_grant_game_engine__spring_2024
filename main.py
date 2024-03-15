@@ -8,6 +8,8 @@ from random import randint
 import sys
 from os import path
 
+# mr cozort test comment
+
 <<<<<<< HEAD
 def draw_health_bar(surf, x, y, pct):
     if pct < 0:
