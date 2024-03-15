@@ -8,6 +8,7 @@ from random import randint
 import sys
 from os import path
 
+<<<<<<< HEAD
 def draw_health_bar(surf, x, y, pct):
     if pct < 0:
         pct = 0
@@ -19,6 +20,9 @@ def draw_health_bar(surf, x, y, pct):
     pg.draw.rect(surf, GREEN, fill_rect)
     pg.draw.rect(surf, WHITE, outline_rect, 2)
     print('trying')
+=======
+
+>>>>>>> 94be38e91f02f1af894a5d55b0fdb4f7fd1cacd4
 # Define game class...
 class Game:
     # Define a special method to init the properties of said class...
@@ -50,6 +54,8 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
         self.coins = pg.sprite.Group()
+        self.mobs = pg.sprite.Group()
+        self.power_ups = pg.sprite.Group()
         # self.player1 = Player(self, 1, 1)
         # for x in range(10, 20):
         #     Wall(self, x, 5)
@@ -64,6 +70,7 @@ class Game:
                     self.player = Player(self, col, row)
                 if tile == 'C':
                     Coin(self, col, row)
+<<<<<<< HEAD
             
     def show_start_screen(self):
         self.screen.fill(BGCOLOR)
@@ -81,6 +88,12 @@ class Game:
                     self.quit()
                 if event.type == pg.KEYUP:
                     waiting = False
+=======
+                if tile == 'M':
+                    Mob(self, col, row)
+                if tile == 'U':
+                    PowerUp(self, col, row)
+>>>>>>> 94be38e91f02f1af894a5d55b0fdb4f7fd1cacd4
 
     def run(self):
         # 
@@ -102,20 +115,33 @@ class Game:
               pg.draw.line(self.screen, LIGHTGREY, (x, 0), (x, HEIGHT))
          for y in range(0, HEIGHT, TILESIZE):
               pg.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
+<<<<<<< HEAD
+=======
+    
+>>>>>>> 94be38e91f02f1af894a5d55b0fdb4f7fd1cacd4
     def draw_text(self, surface, text, size, color, x, y):
         font_name = pg.font.match_font('arial')
         font = pg.font.Font(font_name, size)
         text_surface = font.render(text, True, color)
         text_rect = text_surface.get_rect()
-        text_rect.topleft = (x*TILESIZE,y*TILESIZE)
+        text_rect.topleft = (x,y)
         surface.blit(text_surface, text_rect)
+    
     def draw(self):
+<<<<<<< HEAD
         self.screen.fill(BGCOLOR)
         self.draw_grid()
         self.all_sprites.draw(self.screen)
         self.draw_text(self.screen, str(self.player.moneybag), 64, WHITE, 1, 1)
         draw_health_bar(self.screen, 5,5, 100)
         pg.display.flip()
+=======
+            self.screen.fill(BGCOLOR)
+            self.draw_grid()
+            self.all_sprites.draw(self.screen)
+            self.draw_text(self.screen, "Coins " + str(self.player.moneybag), 24, WHITE, WIDTH/2 - 32, 2)
+            pg.display.flip()
+>>>>>>> 94be38e91f02f1af894a5d55b0fdb4f7fd1cacd4
 
     def events(self):
          for event in pg.event.get():
