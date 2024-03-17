@@ -87,6 +87,15 @@ class Game:
         pg.display.flip()
         self.wait_for_key()
 
+    # self.screen.fill(BGCOLOR)
+        # This line fills the game screen with the background color
+    # self.draw_text(self.screen, "This is the start screen", 24, WHITE, WIDTH/2 - 32, 2)
+        # This line calls a method named draw_text to render text onto the screen
+    # pg.display.flip()
+        # This line updates the display to show the changes made to the screen
+    # self.wait_for_key()
+        # This line calls a method wait_for_key, which presumably waits for a key press event before proceeding
+
     def wait_for_key(self):
         waiting = True
         while waiting:
