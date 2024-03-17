@@ -8,9 +8,20 @@ from random import randint
 import sys
 from os import path
 
-# mr cozort test comment
+# Updating github for code because it wasn't updating
+# def draw_health_bar(surf, x, y, pct):
+    # in line 15 def draw healthbar and surf is surface, x and y are for the size, and pct is for the percentage of the healthbar
+# if pct < 0:
+# pct = 0
+    # if the percentage is less than zero than the percentage is still 0
+# BAR_LENGTH = 100
+# BAR_HEIGHT = 10
+    # l to determine the size of the bar
+# outline_rect = pg.Rect(x, y, BAR_LENGTH, BAR_HEIGHT)
+# fill_rect = pg.Rect(x, y, fill, BAR_HEIGHT)
+    # to determine how much health is left in the bar
 
-<<<<<<< HEAD
+
 def draw_health_bar(surf, x, y, pct):
     if pct < 0:
         pct = 0
@@ -21,10 +32,7 @@ def draw_health_bar(surf, x, y, pct):
     fill_rect = pg.Rect(x, y, fill, BAR_HEIGHT)
     pg.draw.rect(surf, GREEN, fill_rect)
     pg.draw.rect(surf, WHITE, outline_rect, 2)
-    print('trying')
-=======
 
->>>>>>> 94be38e91f02f1af894a5d55b0fdb4f7fd1cacd4
 # Define game class...
 class Game:
     # Define a special method to init the properties of said class...
@@ -72,7 +80,6 @@ class Game:
                     self.player = Player(self, col, row)
                 if tile == 'C':
                     Coin(self, col, row)
-<<<<<<< HEAD
             
     def show_start_screen(self):
         self.screen.fill(BGCOLOR)
@@ -90,12 +97,7 @@ class Game:
                     self.quit()
                 if event.type == pg.KEYUP:
                     waiting = False
-=======
-                if tile == 'M':
-                    Mob(self, col, row)
-                if tile == 'U':
-                    PowerUp(self, col, row)
->>>>>>> 94be38e91f02f1af894a5d55b0fdb4f7fd1cacd4
+
 
     def run(self):
         # 
@@ -117,10 +119,7 @@ class Game:
               pg.draw.line(self.screen, LIGHTGREY, (x, 0), (x, HEIGHT))
          for y in range(0, HEIGHT, TILESIZE):
               pg.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
-<<<<<<< HEAD
-=======
     
->>>>>>> 94be38e91f02f1af894a5d55b0fdb4f7fd1cacd4
     def draw_text(self, surface, text, size, color, x, y):
         font_name = pg.font.match_font('arial')
         font = pg.font.Font(font_name, size)
@@ -130,20 +129,13 @@ class Game:
         surface.blit(text_surface, text_rect)
     
     def draw(self):
-<<<<<<< HEAD
         self.screen.fill(BGCOLOR)
         self.draw_grid()
         self.all_sprites.draw(self.screen)
         self.draw_text(self.screen, str(self.player.moneybag), 64, WHITE, 1, 1)
         draw_health_bar(self.screen, 5,5, 100)
         pg.display.flip()
-=======
-            self.screen.fill(BGCOLOR)
-            self.draw_grid()
-            self.all_sprites.draw(self.screen)
-            self.draw_text(self.screen, "Coins " + str(self.player.moneybag), 24, WHITE, WIDTH/2 - 32, 2)
-            pg.display.flip()
->>>>>>> 94be38e91f02f1af894a5d55b0fdb4f7fd1cacd4
+
 
     def events(self):
          for event in pg.event.get():
