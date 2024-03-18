@@ -18,6 +18,7 @@ def draw_health_bar(surf, x, y, pct):
     fill_rect = pg.Rect(x, y, fill, BAR_HEIGHT)
     pg.draw.rect(surf, GREEN, fill_rect)
     pg.draw.rect(surf, WHITE, outline_rect, 2)
+    
 
 # Updating github for code because it wasn't updating
 # def draw_health_bar(surf, x, y, pct):
@@ -33,7 +34,6 @@ def draw_health_bar(surf, x, y, pct):
     # to determine how much health is left in the bar
     
 # Define game class...
-    
 class Game:
     # Define a special method to init the properties of said class...
     def __init__(self):
@@ -66,6 +66,7 @@ class Game:
         self.coins = pg.sprite.Group()
         self.mobs = pg.sprite.Group()
         self.power_ups = pg.sprite.Group()
+        self.Sludge = pg.sprite.Group()
         # self.player1 = Player(self, 1, 1)
         # for x in range(10, 20):
         #     Wall(self, x, 5)
@@ -80,6 +81,8 @@ class Game:
                     self.player = Player(self, col, row)
                 if tile == 'C':
                     Coin(self, col, row)
+                if tile == 'S':
+                    Sludge(self, col, row)
             
     def show_start_screen(self):
         self.screen.fill(BGCOLOR)
@@ -122,8 +125,19 @@ class Game:
 
     def update(self):
         self.all_sprites.update()
+        # Check for collision between player and Sludge
+        hits = pg.sprite.spritecollide(self.player, self.Sludge, False)
+        if hits:
+            # Reduce player's health (adjust the damage as needed)
+            self.player.health -= 10
+            if self.player.health <= 0:
+                # Game over logic, if player's health goes below or equal to 0
+                self.game_over()
+    def game_over(self):
+        pass
+
     
-    def draw_grid(self):
+        def draw_grid(self):
          for x in range(0, WIDTH, TILESIZE):
               pg.draw.line(self.screen, LIGHTGREY, (x, 0), (x, HEIGHT))
          for y in range(0, HEIGHT, TILESIZE):
@@ -139,7 +153,7 @@ class Game:
     
     def draw(self):
         self.screen.fill(BGCOLOR)
-        self.draw_grid()
+        # self.draw_grid()
         self.all_sprites.draw(self.screen)
         self.draw_text(self.screen, str(self.player.moneybag), 64, WHITE, 1, 1)
         draw_health_bar(self.screen, 5,5, 100)
