@@ -16,21 +16,19 @@ class Player(pg.sprite.Sprite):
         self.x = x * TILESIZE
         self.y = y * TILESIZE
         self.moneybag = 0
-<<<<<<< HEAD
         self.health = 100 
+        self.speed = 300
+        
         
        
-    def take_damage(self, damage):
-        self.health -= damage
-        if self.health >= 0:
-            self.health = 0
+    #def take_damage(self, damage):
+        #self.health -= damage
+        #if self.health >= 0:
+            # self.health = 0
+        
             # Player dies or any other game over logic
         
-        # Update health bar
-        self.health.update(self.health)
-=======
-        self.speed = 300
->>>>>>> 94be38e91f02f1af894a5d55b0fdb4f7fd1cacd4
+        
     
     def get_keys(self):
         self.vx, self.vy = 0, 0
@@ -77,31 +75,25 @@ class Player(pg.sprite.Sprite):
                     self.y = hits[0].rect.bottom
                 self.vy = 0
                 self.rect.y = self.y
-<<<<<<< HEAD
                 self.take_damage_from_wall()  # Call method to take damage
 
     def take_damage_from_wall(self):
         # Define how much damage the player takes when hitting a wall
         damage = 10  # Example damage value, adjust as needed
-        self.game.player.take_damage(damage)  # Assuming self.game.player refers to the player instance
+        #self.game.player.take_damage(damage)  
+        # Assuming self.game.player refers to the player instance
     
-=======
-    # made possible by Aayush's question!
->>>>>>> 94be38e91f02f1af894a5d55b0fdb4f7fd1cacd4
     def collide_with_group(self, group, kill):
         hits = pg.sprite.spritecollide(self, group, kill)
         if hits:
             if str(hits[0].__class__.__name__) == "Coin":
                 self.moneybag += 1
-<<<<<<< HEAD
-            if str(hits[0].__class__.__name__) == "Wall":
-                self.health -= 10
-                print ("hitting wall")
-=======
+            if str(hits[0].__class__.__name__) == "Sludge":
+                self.health -= 20
+                print ("sludge")
             if str(hits[0].__class__.__name__) == "PowerUp":
                 print(hits[0].__class__.__name__)
                 self.speed += 25
->>>>>>> 94be38e91f02f1af894a5d55b0fdb4f7fd1cacd4
 
     def update(self):
         self.get_keys()
@@ -114,21 +106,14 @@ class Player(pg.sprite.Sprite):
         # add collision later
         self.collide_with_walls('y')
         self.collide_with_group(self.game.coins, True)
-<<<<<<< HEAD
         self.collide_with_group(self.game.walls, False)
-=======
         self.collide_with_group(self.game.power_ups, True)
->>>>>>> 94be38e91f02f1af894a5d55b0fdb4f7fd1cacd4
+        self.collide_with_group(self.game.Sludge, True)
           
         # coin_hits = pg.sprite.spritecollide(self.game.coins, True)
         # if coin_hits:
         #     print("I got a coin")
-<<<<<<< HEAD
-       
-
-=======
         
->>>>>>> 94be38e91f02f1af894a5d55b0fdb4f7fd1cacd4
 class Wall(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.walls
@@ -154,13 +139,24 @@ class Coin(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
-<<<<<<< HEAD
+
+class Sludge(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.coins
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image.fill(PURPLE)
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
     
 
 class Enemy(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         pg.sprite.Sprite.__init__(self)
-=======
 
 class PowerUp(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -179,12 +175,10 @@ class Mob(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.mobs
         pg.sprite.Sprite.__init__(self, self.groups)
->>>>>>> 94be38e91f02f1af894a5d55b0fdb4f7fd1cacd4
         self.game = game
         self.image = pg.Surface((TILESIZE, TILESIZE))
         self.image.fill(RED)
         self.rect = self.image.get_rect()
-<<<<<<< HEAD
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
         self.vx = 1  # Initial velocity of the enemy
@@ -203,7 +197,6 @@ class Mob(pg.sprite.Sprite):
             self.vx *= -1  # Reverse velocity
         
 
-=======
         self.x = x
         self.y = y
         self.vx, self.vy = 100, 100
@@ -240,4 +233,3 @@ class Mob(pg.sprite.Sprite):
         self.collide_with_walls('x')
         self.rect.y = self.y
         self.collide_with_walls('y')
->>>>>>> 94be38e91f02f1af894a5d55b0fdb4f7fd1cacd4

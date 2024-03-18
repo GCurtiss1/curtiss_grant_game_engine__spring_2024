@@ -8,12 +8,23 @@ from random import randint
 import sys
 from os import path
 
-def draw_health_bar(surf, x, y, pct):
-    if pct < 0:
-        pct = 0
+#def draw_health_bar(surf, x, y, pct):
+    #if pct < 0:
+        #pct = 0
+    #BAR_LENGTH = 100
+    #BAR_HEIGHT = 10
+    #fill = (pct / 100) * BAR_LENGTH
+    #outline_rect = pg.Rect(x, y, BAR_LENGTH, BAR_HEIGHT)
+    #fill_rect = pg.Rect(x, y, fill, BAR_HEIGHT)
+    #pg.draw.rect(surf, GREEN, fill_rect)
+    #pg.draw.rect(surf, WHITE, outline_rect, 2)
+
+def draw_health_bar(surf, x, y, health):
+    if health < 0:
+        health = 0
     BAR_LENGTH = 100
     BAR_HEIGHT = 10
-    fill = (pct / 100) * BAR_LENGTH
+    fill = (health / 100) * BAR_LENGTH  # Calculate the filled length based on health percentage
     outline_rect = pg.Rect(x, y, BAR_LENGTH, BAR_HEIGHT)
     fill_rect = pg.Rect(x, y, fill, BAR_HEIGHT)
     pg.draw.rect(surf, GREEN, fill_rect)
@@ -129,15 +140,28 @@ class Game:
         hits = pg.sprite.spritecollide(self.player, self.Sludge, False)
         if hits:
             # Reduce player's health (adjust the damage as needed)
-            self.player.health -= 10
-            if self.player.health <= 0:
-                # Game over logic, if player's health goes below or equal to 0
-                self.game_over()
+            self.player.health -= 20
+        if self.player.health <= 0:
+            # Game over logic, if player's health goes below or equal to 0
+            self.game_over()
+    
     def game_over(self):
-        pass
+    # Add game over logic here, such as displaying a game over screen
+    # You might want to reset the game or go back to the main menu
+    # For now, let's just quit the game
+        self.playing = False  # Stop the game loop
+        self.show_game_over_screen()
+
+    def show_game_over_screen(self):
+        # Display the game over screen
+        self.screen.fill(BGCOLOR)
+        self.draw_text(self.screen, "Game Over", 48, WHITE, WIDTH / 2, HEIGHT / 2)
+        pg.display.flip()
+        pg.time.wait(2500)  # Wait for 2.5 seconds before quitting
+        self.quit()  # Quit the game
 
     
-        def draw_grid(self):
+    def draw_grid(self):
          for x in range(0, WIDTH, TILESIZE):
               pg.draw.line(self.screen, LIGHTGREY, (x, 0), (x, HEIGHT))
          for y in range(0, HEIGHT, TILESIZE):
@@ -156,7 +180,8 @@ class Game:
         # self.draw_grid()
         self.all_sprites.draw(self.screen)
         self.draw_text(self.screen, str(self.player.moneybag), 64, WHITE, 1, 1)
-        draw_health_bar(self.screen, 5,5, 100)
+        draw_health_bar(self.screen, 5, 5, self.player.health)  
+        # Pass player's health
         pg.display.flip()
 
 
