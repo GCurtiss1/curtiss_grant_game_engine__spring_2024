@@ -86,6 +86,8 @@ class Game:
                     Coin(self, col, row)
                 if tile == 'S':
                     Sludge(self, col, row)
+                if tile == 'E':
+                    Elixir(self, col, row)
             
     def show_start_screen(self):
         self.screen.fill(BGCOLOR)
@@ -146,6 +148,7 @@ class Game:
     
     def game_over(self):
     # Add game over logic here, such as displaying a game over screen
+
     # For now, let's just quit the game
         self.playing = False  # Stop the game loop
         self.show_game_over_screen()

@@ -16,8 +16,11 @@ class Player(pg.sprite.Sprite):
         self.x = x * TILESIZE
         self.y = y * TILESIZE
         self.moneybag = 0
+        # number the moneybag starts
         self.health = 100 
+        # amount of health the healthbar starts with
         self.speed = 300
+        # The speed of the character
         
         
        
@@ -32,29 +35,24 @@ class Player(pg.sprite.Sprite):
     
     def get_keys(self):
         self.vx, self.vy = 0, 0
+        # initializes the two attributes
         keys = pg.key.get_pressed()
         if keys[pg.K_LEFT] or keys[pg.K_a]:
             self.vx = -self.speed  
+        # check if left arrow key is pressed
         if keys[pg.K_RIGHT] or keys[pg.K_d]:
             self.vx = self.speed  
+        # check if right arrow was pressed
         if keys[pg.K_UP] or keys[pg.K_w]:
             self.vy = -self.speed  
+        # check if up arrow was pressed
         if keys[pg.K_DOWN] or keys[pg.K_s]:
             self.vy = self.speed
+        # check if down arrow was pressed
         if self.vx != 0 and self.vy != 0:
             self.vx *= 0.7071
             self.vy *= 0.7071
-
-    # def move(self, dx=0, dy=0):
-    #     if not self.collide_with_walls(dx, dy):
-    #         self.x += dx
-    #         self.y += dy
-
-    # def collide_with_walls(self, dx=0, dy=0):
-    #     for wall in self.game.walls:
-    #         if wall.x == self.x + dx and wall.y == self.y + dy:
-    #             return True
-    #     return False
+        # help with diagonal velocity movement
             
     def collide_with_walls(self, dir):
         if dir == 'x':
@@ -66,6 +64,7 @@ class Player(pg.sprite.Sprite):
                     self.x = hits[0].rect.right
                 self.vx = 0
                 self.rect.x = self.x
+                # detects if collsion is horizonatal and stops movement sideways
         if dir == 'y':
             hits = pg.sprite.spritecollide(self, self.game.walls, False)
             if hits:
@@ -73,9 +72,11 @@ class Player(pg.sprite.Sprite):
                     self.y = hits[0].rect.top - self.rect.height
                 if self.vy < 0:
                     self.y = hits[0].rect.bottom
+                    # detects if collsion is vertical and stops movement that is vertical
                 self.vy = 0
                 self.rect.y = self.y
-                self.take_damage_from_wall()  # Call method to take damage
+                self.take_damage_from_wall()  
+                # Call method to take damage
 
     def take_damage_from_wall(self):
         # Define how much damage the player takes when hitting a wall
@@ -88,9 +89,14 @@ class Player(pg.sprite.Sprite):
         if hits:
             if str(hits[0].__class__.__name__) == "Coin":
                 self.moneybag += 1
+                # if player hits coin moneybag is +1
             if str(hits[0].__class__.__name__) == "Sludge":
                 self.health -= 20
+                # if str hits sludge takes -20 health
                 print ("sludge")
+            if str(hits[0].__class__.__name__) == "Elixir":
+                self.health += 20
+                # if str hits sludge takes -20 health
             if str(hits[0].__class__.__name__) == "PowerUp":
                 print(hits[0].__class__.__name__)
                 self.speed += 25
@@ -100,18 +106,17 @@ class Player(pg.sprite.Sprite):
         self.x += self.vx * self.game.dt
         self.y += self.vy * self.game.dt
         self.rect.x = self.x
-        # add collision later
         self.collide_with_walls('x')
         self.rect.y = self.y
-        # add collision later
         self.collide_with_walls('y')
         self.collide_with_group(self.game.coins, True)
         self.collide_with_group(self.game.walls, False)
         self.collide_with_group(self.game.power_ups, True)
         self.collide_with_group(self.game.Sludge, True)
+        # 
           
-        # coin_hits = pg.sprite.spritecollide(self.game.coins, True)
-        # if coin_hits:
+        #coin_hits = pg.sprite.spritecollide(self.game.coins, True)
+        #if coin_hits:
         #     print("I got a coin")
         
 class Wall(pg.sprite.Sprite):
@@ -126,6 +131,7 @@ class Wall(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
+        # represents the walls in the game, image of the wall is blue
 
 class Coin(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -139,7 +145,7 @@ class Coin(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
-
+        # is the behavior and attriubutes of coins in the game rendering, positioning, and interaction
 class Sludge(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.coins
@@ -152,11 +158,25 @@ class Sludge(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
-    
+        # provides a blueprint for creating and managing sludge within the game environment 
+
+class Elixir(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.coins
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image.fill(RED)
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
 
 class Enemy(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         pg.sprite.Sprite.__init__(self)
+        # shows enem in envrironment
 
 class PowerUp(pg.sprite.Sprite):
     def __init__(self, game, x, y):
