@@ -8,17 +8,6 @@ from random import randint
 import sys
 from os import path
 
-#def draw_health_bar(surf, x, y, pct):
-    #if pct < 0:
-        #pct = 0
-    #BAR_LENGTH = 100
-    #BAR_HEIGHT = 10
-    #fill = (pct / 100) * BAR_LENGTH
-    #outline_rect = pg.Rect(x, y, BAR_LENGTH, BAR_HEIGHT)
-    #fill_rect = pg.Rect(x, y, fill, BAR_HEIGHT)
-    #pg.draw.rect(surf, GREEN, fill_rect)
-    #pg.draw.rect(surf, WHITE, outline_rect, 2)
-
 def draw_health_bar(surf, x, y, health):
     if health < 0:
         health = 0
@@ -56,6 +45,8 @@ class Game:
         # setting game clock 
         self.clock = pg.time.Clock()
         self.load_data()
+        self.collected_coins = 0
+
     def load_data(self):
         game_folder = path.dirname(__file__)
         self.map_data = []
@@ -68,6 +59,7 @@ class Game:
             for line in f:
                 print(line)
                 self.map_data.append(line)
+    
 
     # Create run method which runs the whole GAME
     def new(self):
@@ -144,10 +136,16 @@ class Game:
         if self.player.health <= 0:
             # Game over logic, if player's health goes below or equal to 0
             self.game_over()
+        for hit in hits:
+            self.collected_coins += 1  # Increment collected coins count
+        # Check if player has collected seven coins
+        if self.collected_coins >= 7:
+            self.load_next_map()
+        
+        
     
     def game_over(self):
     # Add game over logic here, such as displaying a game over screen
-    # You might want to reset the game or go back to the main menu
     # For now, let's just quit the game
         self.playing = False  # Stop the game loop
         self.show_game_over_screen()
