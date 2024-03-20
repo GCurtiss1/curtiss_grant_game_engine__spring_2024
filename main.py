@@ -114,19 +114,21 @@ class Game:
                     self.quit()
                 if event.type == pg.KEYUP:
                     waiting = False
+                # waiting fo right key up
 
 
     def run(self):
-        # 
         self.playing = True
         while self.playing:
             self.dt = self.clock.tick(FPS) / 1000
             self.events()
             self.update()
             self.draw()
+            # updates positon
     def quit(self):
          pg.quit()
          sys.exit()
+
 
     def update(self):
         self.all_sprites.update()
@@ -175,6 +177,7 @@ class Game:
         text_rect = text_surface.get_rect()
         text_rect.topleft = (x,y)
         surface.blit(text_surface, text_rect)
+        # draws tge text for title screen
     
     def draw(self):
         self.screen.fill(BGCOLOR)

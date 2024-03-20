@@ -113,7 +113,7 @@ class Player(pg.sprite.Sprite):
         self.collide_with_group(self.game.walls, False)
         self.collide_with_group(self.game.power_ups, True)
         self.collide_with_group(self.game.Sludge, True)
-        # 
+        # Defines is player hits the object
           
         #coin_hits = pg.sprite.spritecollide(self.game.coins, True)
         #if coin_hits:
@@ -146,6 +146,7 @@ class Coin(pg.sprite.Sprite):
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
         # is the behavior and attriubutes of coins in the game rendering, positioning, and interaction
+
 class Sludge(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.coins
@@ -172,11 +173,12 @@ class Elixir(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
+        # provides blueprint for creating and managing elixir within game environment
 
 class Enemy(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         pg.sprite.Sprite.__init__(self)
-        # shows enem in envrironment
+        # shows enemies in envrironment
 
 class PowerUp(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -253,3 +255,4 @@ class Mob(pg.sprite.Sprite):
         self.collide_with_walls('x')
         self.rect.y = self.y
         self.collide_with_walls('y')
+        # stops moving if you hit a wall
