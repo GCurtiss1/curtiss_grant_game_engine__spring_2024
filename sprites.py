@@ -97,9 +97,11 @@ class Player(pg.sprite.Sprite):
             if str(hits[0].__class__.__name__) == "Elixir":
                 self.health += 20
                 # if str hits sludge takes -20 health
-            if str(hits[0].__class__.__name__) == "PowerUp":
+            if str(hits[0].__class__.__name__) == "Lightning":
                 print(hits[0].__class__.__name__)
-                self.speed += 25
+                self.speed += 100
+                # if player 
+
 
     def update(self):
         self.get_keys()
@@ -174,6 +176,21 @@ class Elixir(pg.sprite.Sprite):
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
         # provides blueprint for creating and managing elixir within game environment
+
+
+class Lightning(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.coins
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface((TILESIZE, TILESIZE))
+        self.image.fill(ORANGE)
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
+        # provides blueprint for creating and managing lightning within game environment
 
 class Enemy(pg.sprite.Sprite):
     def __init__(self, game, x, y):

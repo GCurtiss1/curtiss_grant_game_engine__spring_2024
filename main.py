@@ -88,6 +88,8 @@ class Game:
                     Sludge(self, col, row)
                 if tile == 'E':
                     Elixir(self, col, row)
+                if tile == 'L':
+                    Lightning(self, col, row)
             
     def show_start_screen(self):
         self.screen.fill(BGCOLOR)
