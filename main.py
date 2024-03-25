@@ -1,5 +1,4 @@
 # This file was created by: Grant Curtiss
-
 # import libraries and modules
 import pygame as pg
 from settings import *
@@ -7,7 +6,6 @@ from sprites import *
 from random import randint
 import sys
 from os import path
-
 def draw_health_bar(surf, x, y, health):
     if health < 0:
         health = 0
@@ -19,7 +17,6 @@ def draw_health_bar(surf, x, y, health):
     pg.draw.rect(surf, GREEN, fill_rect)
     pg.draw.rect(surf, WHITE, outline_rect, 2)
     
-
 # Updating github for code because it wasn't updating
 # def draw_health_bar(surf, x, y, pct):
     # in line 15 def draw healthbar and surf is surface, x and y are for the size, and pct is for the percentage of the healthbar
@@ -32,6 +29,10 @@ def draw_health_bar(surf, x, y, health):
 # outline_rect = pg.Rect(x, y, BAR_LENGTH, BAR_HEIGHT)
 # fill_rect = pg.Rect(x, y, fill, BAR_HEIGHT)
     # to determine how much health is left in the bar
+
+    # added level values for multiple maps
+LEVEL1 = "map.txt"
+LEVEL2 = "map2.txt"
     
 # Define game class...
 class Game:
@@ -46,21 +47,23 @@ class Game:
         self.clock = pg.time.Clock()
         self.load_data()
         self.collected_coins = 0
-
     def load_data(self):
-        game_folder = path.dirname(__file__)
+        self.game_folder = path.dirname(__file__)
         self.map_data = []
         '''
         The with statement is a context manager in Python. 
         It is used to ensure that a resource is properly closed or released 
-        after it is used. This can help to prevent errors and leaks.
+        after it is used. This can help to prevent errors and leaks                                                .
         '''
-        with open(path.join(game_folder, 'map.txt'), 'rt') as f:
+        with open(path.join(self.game_folder, 'map.txt'), 'rt') as f:
+            for line in f:
+                print(line)
+                self.map_data.append(line)
+        with open(path.join(LEVEL1), 'rt') as f:
             for line in f:
                 print(line)
                 self.map_data.append(line)
     
-
     # Create run method which runs the whole GAME
     def new(self):
         print("create new game...")
@@ -90,13 +93,41 @@ class Game:
                     Elixir(self, col, row)
                 if tile == 'L':
                     Lightning(self, col, row)
-            
+
+    def change_level(self, lvl):
+        # kill all existing sprites first to save memory
+        for s in self.all_sprites:
+         s.kill()
+    # reset criteria for changing level
+        self.player.moneybag = 0
+    # reset map data list to empty - Remove this line
+    # self.map_data = [] - Remove this line
+    # open next level
+        with open(path.join(self.game_folder, lvl), 'rt') as f:  # Use lvl parameter here
+            for line in f:
+                print(line)
+            self.map_data.append(line)  # Append data for the new level
+    # Create sprites from the new map data
+        for row, tiles in enumerate(self.map_data):
+            for col, tile in enumerate(tiles):
+                if tile == '1':
+                    Wall(self, col, row)
+                elif tile == 'P':
+                    self.player = Player(self, col, row)
+                elif tile == 'C':
+                    Coin(self, col, row)
+                elif tile == 'S':
+                    Sludge(self, col, row)
+                elif tile == 'E':
+                    Elixir(self, col, row)
+                elif tile == 'L':
+                    Lightning(self, col, row)
+
     def show_start_screen(self):
         self.screen.fill(BGCOLOR)
         self.draw_text(self.screen, "This is the start screen", 24, WHITE, WIDTH/2 - 32, 2)
         pg.display.flip()
         self.wait_for_key()
-
     # self.screen.fill(BGCOLOR)
         # This line fills the game screen with the background color
     # self.draw_text(self.screen, "This is the start screen", 24, WHITE, WIDTH/2 - 32, 2)
@@ -105,7 +136,6 @@ class Game:
         # This line updates the display to show the changes made to the screen
     # self.wait_for_key()
         # This line calls a method wait_for_key, which presumably waits for a key press event before proceeding
-
     def wait_for_key(self):
         waiting = True
         while waiting:
@@ -117,8 +147,6 @@ class Game:
                 if event.type == pg.KEYUP:
                     waiting = False
                 # waiting fo right key up
-
-
     def run(self):
         self.playing = True
         while self.playing:
@@ -130,8 +158,6 @@ class Game:
     def quit(self):
          pg.quit()
          sys.exit()
-
-
     def update(self):
         self.all_sprites.update()
         # Check for collision between player and Sludge
@@ -145,26 +171,23 @@ class Game:
         for hit in hits:
             self.collected_coins += 1  # Increment collected coins count
         # Check if player has collected seven coins
-        if self.collected_coins >= 7:
-            self.load_next_map()
+        if self.player.moneybag >= 7:
+                self.change_level(LEVEL2)
         
         
     
     def game_over(self):
     # Add game over logic here, such as displaying a game over screen
-
     # For now, let's just quit the game
         self.playing = False  # Stop the game loop
         self.show_game_over_screen()
-
     def show_game_over_screen(self):
         # Display the game over screen
         self.screen.fill(BGCOLOR)
-        self.draw_text(self.screen, "Game Over", 48, WHITE, WIDTH / 2, HEIGHT / 2)
+        self.draw_text(self.screen, "Game Over", 60, WHITE, WIDTH / 3, HEIGHT / 3)
         pg.display.flip()
         pg.time.wait(2500)  # Wait for 2.5 seconds before quitting
         self.quit()  # Quit the game
-
     
     def draw_grid(self):
          for x in range(0, WIDTH, TILESIZE):
@@ -189,8 +212,6 @@ class Game:
         draw_health_bar(self.screen, 5, 5, self.player.health)  
         # Pass player's health
         pg.display.flip()
-
-
     def events(self):
          for event in pg.event.get():
             if event.type == pg.QUIT:
@@ -204,7 +225,6 @@ class Game:
             #         self.player.move(dy=-1)
             #     if event.key == pg.K_DOWN:
             #         self.player.move(dy=1)
-
 # Instantiate the game... 
 g = Game()
 # use game method run to run
